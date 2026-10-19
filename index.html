@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8efe0">
+  <meta name="description" content="Esplora i consumi di energia dell’industria e dei servizi in Svizzera, dal 2002 al 2025. Bozza interattiva del kit 10.">
+  <title>Chi usa l’energia? · Watt About · Kit 10</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="data.js"></script>
+  <script defer src="main.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="masthead">
+      <a class="brand" href="./index.html" aria-label="Watt About, pagina iniziale"><span class="brand-mark">w.</span><span>WATT ABOUT<span class="brand-sub">ESPLORA L’ENERGIA</span></span></a>
+      <div class="edition"><span class="prototype">BOZZA INTERATTIVA</span><span>KIT <b>10</b></span></div>
+    </header>
+
+    <section class="intro">
+      <div><p class="eyebrow">SVIZZERA · INDUSTRIA E SERVIZI · 2002–2025</p><h1>CHI USA<br>L’ENERGIA?</h1></div>
+      <div class="intro-right"><p>Dalle fabbriche alle scuole, dai negozi agli ospedali.<br> Scopri dove va l’energia e come cambia nel tempo.</p>
+        <div class="view-switch" role="group" aria-label="Scegli la visualizzazione">
+          <button type="button" class="active" data-view="share" aria-pressed="true"><span>01</span> Chi consuma?</button>
+          <button type="button" data-view="trend" aria-pressed="false"><span>02</span> Come cambia?</button>
+        </div>
+      </div>
+    </section>
+
+    <main>
+      <div class="explore-bar">
+        <div class="scope-switch" role="group" aria-label="Scegli cosa esplorare">
+          <button type="button" data-scope="all" class="active" aria-pressed="true">Panoramica</button>
+          <button type="button" data-scope="industry" aria-pressed="false">Industria e costruzioni <span>↗</span></button>
+          <button type="button" data-scope="services" aria-pressed="false">Servizi <span>↗</span></button>
+        </div>
+        <span class="explore-hint" id="explore-hint">Due famiglie, tante attività.</span>
+      </div>
+
+      <section id="share-view" class="share-view" aria-label="Ripartizione dei consumi">
+        <div class="donut-panel">
+          <div class="chart-kicker"><span class="live-dot"></span> <span id="chart-kicker">TUTTE LE ATTIVITÀ</span><span id="chart-year">2025</span></div>
+          <div class="donut-wrap">
+            <svg id="donut" viewBox="0 0 450 450" role="group" aria-label="Ripartizione dei consumi per categoria"></svg>
+            <div class="donut-center" aria-live="polite"><span id="center-name">CONSUMO COMPLESSIVO</span><strong id="center-value">—</strong><span class="unit">MILA TJ</span><span id="center-extra">nell’anno selezionato</span></div>
+          </div>
+          <p class="chart-instruction" id="chart-instruction">Scegli una famiglia per scoprire cosa c’è dentro <span>↗</span></p>
+        </div>
+        <div class="categories-panel"><div class="section-label"><span id="categories-title">DOVE VA L’ENERGIA</span><span id="categories-count">02 FAMIGLIE</span></div><div id="category-grid" class="category-grid"></div><p id="category-detail" class="category-detail">Le percentuali si riferiscono all’insieme di industria, costruzioni e servizi.</p></div>
+      </section>
+
+      <section id="trend-view" class="trend-view" aria-label="Andamento dei consumi" hidden>
+        <div class="trend-heading"><div><p class="eyebrow">GUARDA IL PERCORSO COMPLETO</p><h2>IL TEMPO CAMBIA LE COSE.</h2></div><div class="metric-switch" role="group" aria-label="Come confrontare i consumi"><button type="button" data-metric="absolute" class="active" aria-pressed="true">Consumi</button><button type="button" data-metric="change" aria-pressed="false">Variazione dal 2002</button></div></div>
+        <p id="trend-caption" class="trend-caption">Ogni linea racconta una famiglia di attività. Sposta il cursore per esplorare gli anni.</p>
+        <div class="line-chart-wrap"><svg id="line-chart" viewBox="0 0 1120 340" role="img" aria-label="Andamento annuale dei consumi dal 2002 al 2025"></svg><div id="chart-tooltip" class="chart-tooltip" hidden></div></div>
+        <div id="trend-legend" class="trend-legend" role="group" aria-label="Seleziona i gruppi da confrontare"></div><p id="selection-message" class="selection-message" aria-live="polite"></p>
+      </section>
+
+      <section class="timeline" aria-label="Scegli l’anno">
+        <button type="button" id="play" class="play-button" aria-label="Riproduci gli anni" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5L19 12L8 19Z" fill="currentColor"/></svg></button>
+        <div class="slider-wrap"><div class="slider-labels"><span>2002</span><label for="year-slider">TRASCINA E VIAGGIA NEL TEMPO</label><span>2025</span></div><input type="range" id="year-slider" min="2002" max="2025" step="1" value="2025" aria-label="Anno visualizzato"></div>
+        <output class="year-output" for="year-slider" id="year-output">2025</output>
+      </section>
+
+      <aside class="insight" aria-live="polite"><span class="insight-icon" aria-hidden="true">↘</span><p id="insight-text"></p><span class="insight-label">UNO SGUARDO IN PIÙ</span></aside>
+    </main>
+
+    <footer><span>UN ANNO ALLA VOLTA, UN PEZZO DI MONDO.</span><button type="button" id="about-open">Dati, gruppi e unità di misura <span>ⓘ</span></button></footer>
+  </div>
+
+  <dialog id="about-dialog" aria-labelledby="about-title">
+    <div class="dialog-top"><span class="eyebrow">DIETRO I NUMERI</span><button type="button" id="about-close" aria-label="Chiudi le informazioni">×</button></div>
+    <h2 id="about-title">COSA STAI GUARDANDO?</h2>
+    <p>Una bozza per esplorare l’energia usata dall’industria, dalle costruzioni e dai servizi in Svizzera. Le illustrazioni sono segnaposto vettoriali; i dati provengono dalle tabelle UFE.</p>
+    <h3>Che cos’è un TJ?</h3><p>Il terajoule è un’unità di energia. Permette di mettere sulla stessa scala elettricità e combustibili diversi. Qui «mila TJ» significa migliaia di terajoule.</p>
+    <h3>Quale energia è inclusa?</h3><p>Sommiamo elettricità, gas naturale, olio da riscaldamento extraleggero, olio medio/denso, carbone e rifiuti industriali usati per produrre energia. Legna e teleriscaldamento sono esclusi perché le tabelle riportano dati incompleti. Le economie domestiche non sono incluse. I trasporti non sono una categoria autonoma: il perimetro dei servizi segue le definizioni della fonte.</p>
+    <h3>Una serie continua, dal 2002 al 2025</h3><p>Serie storica raccordata per facilitare il confronto nel tempo. Il 2013 è disponibile con due basi statistiche diverse: per ogni ramo e vettore, i valori del 2002–2012 sono moltiplicati per il rapporto tra il 2013 della serie recente e quello della serie storica. Dal 2013 usiamo la serie recente. È un’elaborazione divulgativa, non una serie ufficiale omogeneizzata; la correzione non elimina tutti i cambiamenti metodologici. Per esempio, dal 2008 i codici NOGA 49, 50 e 51 dei trasporti sono esclusi dall’estrapolazione dei servizi.</p>
+    <h3>Come sono costruiti i gruppi?</h3><p>I raggruppamenti sono editoriali e restano uguali in tutti gli anni. In ciascuna famiglia, le percentuali sono calcolate sul totale della famiglia selezionata.</p><div id="group-definitions"></div>
+    <h3>Fonti e arrotondamenti</h3><p>Ufficio federale dell’energia, tabelle «Consumo energetico nell’industria e nel settore dei servizi», 1999–2013 e 2013–2025, edizione luglio 2026. Valori e percentuali sono arrotondati: la somma delle percentuali mostrate può differire leggermente da 100%.</p><a href="https://pubdb.bfe.admin.ch/it/sammlungen/energiestatistik-energieverbrauch-in-der-industrie-und-im-dienstleistungssektor" target="_blank" rel="noopener noreferrer">Vai alle pubblicazioni UFE ↗</a>
+  </dialog>
+</body>
+</html>
