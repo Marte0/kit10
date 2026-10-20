@@ -25,8 +25,8 @@
     ['other-serv', 'Altri servizi', [19], 'city'],
   ]);
   const families = [
-    { id: 'industry', name: 'Industria e costruzioni', ids: Array.from({ length: 12 }, (_, i) => i + 1), color: colors[0], ink: inks[0], icon: 'factory' },
-    { id: 'services', name: 'Servizi', ids: Array.from({ length: 7 }, (_, i) => i + 13), color: colors[2], ink: inks[2], icon: 'city' },
+    { id: 'industry', name: 'Industria e costruzioni', ids: Array.from({ length: 12 }, (_, i) => i + 1), color: colors[0], ink: inks[0], icon: 'factory', image: 'assets/images/industria-v1.png' },
+    { id: 'services', name: 'Servizi', ids: Array.from({ length: 7 }, (_, i) => i + 13), color: colors[2], ink: inks[2], icon: 'city', image: 'assets/images/servizi-v1.png' },
   ];
   const groupsFor = (scope) => scope === 'all' ? families : scope === 'industry' ? industry : services;
   const scopeNames = { all: 'Tutte le attività', industry: 'Industria e costruzioni', services: 'Servizi' };
@@ -159,7 +159,8 @@
     grid.classList.toggle('overview', state.scope === 'all');
     grid.innerHTML = groups.map((group) => {
       const value = valueOf(row, group);
-      return `<button type="button" class="category-card ${state.scope === 'all' ? 'overview-card' : ''}" data-group="${group.id}" style="--card-tint:${group.color}28;--card-ink:${group.ink}" aria-label="${group.name}: ${formatDecimal(value / total * 100)}%, ${formatNumber(value)} TJ. ${state.scope === 'all' ? 'Esplora la famiglia' : 'Scopri le attività incluse'}"><span class="card-percent">${percent(value / total * 100)}<small>%</small></span><span class="card-icon">${icon(group.icon, group.color)}</span><span class="card-name">${group.name.toUpperCase()}</span><span class="card-value">${formatNumber(value)} TJ</span>${state.scope === 'all' ? '<span class="card-arrow" aria-hidden="true">↗</span>' : ''}</button>`;
+      const shareLabel = `<span class="card-percent">${percent(value / total * 100)}<small>%</small></span>`;
+      return `<button type="button" class="category-card ${state.scope === 'all' ? 'overview-card' : ''}" data-group="${group.id}" style="--card-tint:${group.color}28;--card-ink:${group.ink};--card-color:${group.color}" aria-label="${group.name}: ${formatDecimal(value / total * 100)}%, ${formatNumber(value)} TJ. ${state.scope === 'all' ? 'Esplora la famiglia' : 'Scopri le attività incluse'}">${group.image ? '' : shareLabel}<span class="card-icon${group.image ? ' card-image' : ''}">${group.image ? `${shareLabel}<img src="${group.image}" alt="" width="1254" height="1254" decoding="async">` : icon(group.icon, group.color)}</span><span class="card-name">${group.name.toUpperCase()}</span><span class="card-value">${formatNumber(value)} TJ</span>${state.scope === 'all' ? '<span class="card-arrow" aria-hidden="true">↗</span>' : ''}</button>`;
     }).join('');
     $$('.category-card').forEach((card) => {
       card.addEventListener('pointerenter', () => highlight(card.dataset.group));

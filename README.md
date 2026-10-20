@@ -29,7 +29,7 @@ Le categorie sono accorpamenti editoriali costanti nel tempo, definiti in `main.
 
 ## Da definire dopo il riscontro
 
-Accorpamenti e nomi finali, illustrazioni definitive, eventuale approfondimento di singoli rami, trattamento editoriale delle variazioni nel tempo. Le icone attuali sono segnaposto vettoriali.
+Accorpamenti e nomi finali, illustrazioni definitive, eventuale approfondimento di singoli rami, trattamento editoriale delle variazioni nel tempo. Le due schede della panoramica usano ritagli fotografici generati con ImageGen, in PNG trasparente, nella cartella `assets/images/`. Le icone dei gruppi di dettaglio restano segnaposto vettoriali.
 
 ## Raggio del donut
 
