@@ -9,24 +9,24 @@
   const inks = ['#3e5412', '#785000', '#005573', '#8C0040', '#802e29', '#33489E'];
   const makeGroups = (items) => items.map(([id, name, ids, icon, image], i) => ({ id, name, ids, icon, image, color: colors[i], ink: inks[i] }));
   const industry = makeGroups([
-    ['chem', 'Chimica e farmaceutica', [4], 'chem', 'assets/images/chimica-farmaceutica-v1.png'],
-    ['food', 'Alimentare', [1], 'food', 'assets/images/alimentare-v2.png'],
-    ['paper', 'Carta e tessile', [2, 3], 'paper', 'assets/images/carta-tessile-v1.png'],
-    ['mineral', 'Cemento e minerali', [5, 6], 'mineral', 'assets/images/cemento-minerali-v2.png'],
-    ['metal', 'Metalli e macchinari', [7, 8, 9, 10], 'metal', 'assets/images/metalli-macchinari-v1.png'],
-    ['other-ind', 'Altre industrie e costruzioni', [11, 12], 'crane', 'assets/images/altre-industrie-costruzioni-v2.png'],
+    ['chem', 'Chimica e farmaceutica', [4], 'chem', 'assets/images/chimica-farmaceutica-v1.webp'],
+    ['food', 'Alimentare', [1], 'food', 'assets/images/alimentare-v2.webp'],
+    ['paper', 'Carta e tessile', [2, 3], 'paper', 'assets/images/carta-tessile-v1.webp'],
+    ['mineral', 'Cemento e minerali', [5, 6], 'mineral', 'assets/images/cemento-minerali-v2.webp'],
+    ['metal', 'Metalli e macchinari', [7, 8, 9, 10], 'metal', 'assets/images/metalli-macchinari-v1.webp'],
+    ['other-ind', 'Altre industrie e costruzioni', [11, 12], 'crane', 'assets/images/altre-industrie-costruzioni-v2.webp'],
   ]);
   const services = makeGroups([
-    ['trade', 'Commercio', [13], 'shop', 'assets/images/commercio-v2.png'],
-    ['hospitality', 'Alberghi e ristoranti', [14], 'food', 'assets/images/alberghi-ristoranti-v2.png'],
-    ['finance', 'Banche e assicurazioni', [15], 'bank', 'assets/images/banche-assicurazioni-v2.png'],
-    ['school', 'Scuole e amministrazione', [16, 17], 'school', 'assets/images/scuole-amministrazione-v2.png'],
-    ['health', 'Salute e assistenza', [18], 'health', 'assets/images/salute-assistenza-v2.png'],
-    ['other-serv', 'Altri servizi', [19], 'city', 'assets/images/altri-servizi-v2.png'],
+    ['trade', 'Commercio', [13], 'shop', 'assets/images/commercio-v2.webp'],
+    ['hospitality', 'Alberghi e ristoranti', [14], 'food', 'assets/images/alberghi-ristoranti-v2.webp'],
+    ['finance', 'Banche e assicurazioni', [15], 'bank', 'assets/images/banche-assicurazioni-v2.webp'],
+    ['school', 'Scuole e amministrazione', [16, 17], 'school', 'assets/images/scuole-amministrazione-v2.webp'],
+    ['health', 'Salute e assistenza', [18], 'health', 'assets/images/salute-assistenza-v2.webp'],
+    ['other-serv', 'Altri servizi', [19], 'city', 'assets/images/altri-servizi-v2.webp'],
   ]);
   const families = [
-    { id: 'industry', name: 'Industria e costruzioni', ids: Array.from({ length: 12 }, (_, i) => i + 1), color: colors[0], ink: inks[0], icon: 'factory', image: 'assets/images/industria-v1.png' },
-    { id: 'services', name: 'Servizi', ids: Array.from({ length: 7 }, (_, i) => i + 13), color: colors[2], ink: inks[2], icon: 'city', image: 'assets/images/servizi-v1.png' },
+    { id: 'industry', name: 'Industria e costruzioni', ids: Array.from({ length: 12 }, (_, i) => i + 1), color: colors[0], ink: inks[0], icon: 'factory', image: 'assets/images/industria-v1.webp' },
+    { id: 'services', name: 'Servizi', ids: Array.from({ length: 7 }, (_, i) => i + 13), color: colors[2], ink: inks[2], icon: 'city', image: 'assets/images/servizi-v1.webp' },
   ];
   const groupsFor = (scope) => scope === 'all' ? families : scope === 'industry' ? industry : services;
   const scopeNames = { all: 'Tutte le attività', industry: 'Industria e costruzioni', services: 'Servizi' };
@@ -37,7 +37,7 @@
   const percent = (n) => n < 1 && n > 0 ? '<1' : String(Math.round(n));
   const deltaOf = (row, group) => (valueOf(row, group) / valueOf(rows[0], group) - 1) * 100;
   const formatDelta = (n) => `${n > 0 ? '+' : n < 0 ? '−' : ''}${formatDecimal(Math.abs(n))}%`;
-  const state = { year: 2025, scope: 'all', view: 'share', metric: 'absolute', selected: ['industry', 'services'], hover: null, timer: null };
+  const state = { year: 2025, scope: 'all', view: 'share', metric: 'absolute', trendFocus: null, hover: null, timer: null };
   const currentRow = () => rows[state.year - 2002];
 
   function icon(kind, color) {
@@ -148,8 +148,6 @@
       };
       donutFrame = requestAnimationFrame(frame);
     } else drawAmounts(targetValues);
-    $('#chart-year').textContent = state.year;
-    $('#chart-kicker').textContent = scopeNames[state.scope].toUpperCase();
     setCenter();
   }
   function renderCards() {
@@ -163,7 +161,7 @@
       const tag = overview ? 'button' : 'article';
       const attributes = overview ? 'type="button"' : 'tabindex="0"';
       const description = `${group.name}: ${formatDecimal(value / total * 100)}%, ${formatNumber(value)} TJ${overview ? '. Esplora la famiglia' : ''}`;
-      const visual = group.image ? `<img src="${group.image}" alt="" width="1254" height="1254" decoding="async">` : `<span class="badge-fallback">${icon(group.icon, group.color)}</span>`;
+      const visual = group.image ? `<img src="${group.image}" alt="" srcset="${group.image.replace('.webp', '-160.webp')} 160w, ${group.image} 320w" sizes="(max-width: 370px) 110px, 120px" width="320" height="320" decoding="async">` : `<span class="badge-fallback">${icon(group.icon, group.color)}</span>`;
       return `<${tag} ${attributes} class="category-card ${overview ? 'overview-card' : 'detail-item'}" data-group="${group.id}" style="--card-tint:${group.color}28;--card-ink:${group.ink};--card-color:${group.color}" aria-label="${description}"><span class="card-icon category-badge${group.image ? ' card-image' : ''}"><span class="card-percent">${percent(value / total * 100)}<small>%</small></span>${visual}</span><span class="card-name">${group.name.toUpperCase()}</span><span class="card-value">${formatNumber(value)} TJ</span>${overview ? '<span class="card-arrow" aria-hidden="true">↗</span>' : ''}</${tag}>`;
     }).join('');
     $$('.category-card').forEach((card) => {
@@ -183,7 +181,7 @@
     const W = mobile ? Math.max(280, window.innerWidth - 40) : 1120, H = mobile ? 300 : 340;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     const margin = { left: 56, right: 25, top: 39, bottom: 38 };
-    const groups = groupsFor(state.scope).filter((g) => state.selected.includes(g.id));
+    const groups = groupsFor(state.scope);
     const getValue = (row, group) => state.metric === 'absolute' ? valueOf(row, group) / 1000 : deltaOf(row, group);
     const values = rows.flatMap((row) => groups.map((g) => getValue(row, g)));
     let min = Math.min(0, ...values), max = Math.max(0, ...values);
@@ -202,7 +200,7 @@
     (mobile ? [2002, 2010, 2018, 2025] : [2002, 2005, 2010, 2015, 2020, 2025]).forEach((year) => textNode(String(year), { x: x(year), y: H - 10, class: 'axis-text', 'text-anchor': 'middle' }));
     groups.forEach((group) => {
       const d = rows.map((row, i) => `${i ? 'L' : 'M'}${x(row.year)},${y(getValue(row, group))}`).join(' ');
-      svg.append(el('path', { d, stroke: group.ink, class: 'trend-line' }));
+      svg.append(el('path', { d, stroke: group.ink, 'data-line': group.id, class: 'trend-line' }));
     });
     svg.append(el('line', { x1: x(state.year), x2: x(state.year), y1: margin.top, y2: H - margin.bottom, class: 'cursor-line', id: 'trend-cursor' }));
     groups.forEach((group) => svg.append(el('circle', { cx: x(state.year), cy: y(getValue(currentRow(), group)), r: 5, fill: group.color, stroke: group.ink, 'stroke-width': 2, 'data-dot': group.id })));
@@ -214,6 +212,7 @@
     trendGeometry = { x, y, W, margin, getValue, groups };
     $('#trend-caption').textContent = state.metric === 'absolute' ? 'Più in alto è la linea, più energia viene usata. Esplora un anno con il cursore o con lo slider.' : 'Tutti partono da zero: qui confronti quanto sono cambiati i consumi rispetto al 2002, anche se le attività hanno dimensioni diverse.';
     renderLegend();
+    focusTrend(state.trendFocus);
   }
   function niceStep(value) {
     const power = 10 ** Math.floor(Math.log10(value));
@@ -253,26 +252,38 @@
     const width = $('.line-chart-wrap').clientWidth;
     tooltip.style.left = `${Math.max(0, Math.min(width - tooltip.offsetWidth, (state.year - 2002) / 23 * width - tooltip.offsetWidth / 2))}px`;
   }
+  function focusTrend(id) {
+    $$('.trend-line, [data-dot]').forEach((line) => {
+      const ownId = line.dataset.line || line.dataset.dot;
+      line.classList.toggle('is-muted', Boolean(id && ownId !== id));
+      line.classList.toggle('is-focused', ownId === id);
+    });
+    $$('[data-legend]').forEach((button) => {
+      button.classList.toggle('is-focused', button.dataset.legend === id);
+      button.setAttribute('aria-pressed', String(button.dataset.legend === state.trendFocus));
+    });
+  }
   function renderLegend() {
-    $('#trend-legend').innerHTML = groupsFor(state.scope).map((group) => `<button type="button" data-legend="${group.id}" class="${state.selected.includes(group.id) ? 'active' : ''}" aria-pressed="${state.selected.includes(group.id)}"><i class="legend-dot" style="background:${group.color}"></i><span>${group.name}</span><span class="legend-value"></span></button>`).join('');
-    $$('[data-legend]').forEach((button) => button.addEventListener('click', () => {
-      const id = button.dataset.legend;
-      if (state.selected.includes(id)) {
-        if (state.selected.length === 1) { $('#selection-message').textContent = 'Lascia almeno un gruppo selezionato per vedere il grafico.'; return; }
-        state.selected = state.selected.filter((selected) => selected !== id);
-      } else if (state.selected.length < 3) { state.selected.push(id); }
-      else { $('#selection-message').textContent = 'Puoi confrontare fino a 3 gruppi. Deselezionane uno per aggiungerne un altro.'; return; }
-      $('#chart-tooltip').hidden = true;
-      renderTrend();
-      document.querySelector(`[data-legend="${id}"]`).focus({ preventScroll: true });
-    }));
+    $('#trend-legend').innerHTML = groupsFor(state.scope).map((group) => `<button type="button" class="trend-legend-item" data-legend="${group.id}" aria-pressed="false" aria-label="Evidenzia ${group.name}" style="--series-ink:${group.ink}"><svg class="legend-swatch" viewBox="0 0 36 12" aria-hidden="true"><path d="M2 6H34" stroke="${group.ink}"/></svg><span class="legend-name">${group.name}</span><span class="legend-value"></span></button>`).join('');
+    $$('[data-legend]').forEach((button) => {
+      button.addEventListener('pointerenter', (event) => { if (event.pointerType !== 'touch') focusTrend(button.dataset.legend); });
+      button.addEventListener('pointerleave', () => focusTrend(state.trendFocus));
+      button.addEventListener('focus', () => focusTrend(button.dataset.legend));
+      button.addEventListener('blur', () => focusTrend(state.trendFocus));
+      button.addEventListener('click', () => {
+        state.trendFocus = state.trendFocus === button.dataset.legend ? null : button.dataset.legend;
+        focusTrend(state.trendFocus);
+      });
+      button.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') { state.trendFocus = null; focusTrend(null); }
+      });
+    });
     updateLegendValues();
-    $('#selection-message').textContent = state.scope === 'all' ? 'Scegli Industria e costruzioni o Servizi per esplorare i singoli gruppi.' : 'Confronta fino a 3 gruppi alla volta. Clicca i nomi per aggiungerli o toglierli.';
   }
   function updateLegendValues() {
-    $$('[data-legend]').forEach((button) => {
-      const group = groupsFor(state.scope).find((g) => g.id === button.dataset.legend);
-      button.querySelector('.legend-value').textContent = state.selected.includes(group.id) ? state.metric === 'absolute' ? `${formatDecimal(valueOf(currentRow(), group) / 1000)} mila TJ` : formatDelta(deltaOf(currentRow(), group)) : '';
+    $$('[data-legend]').forEach((item) => {
+      const group = groupsFor(state.scope).find((g) => g.id === item.dataset.legend);
+      item.querySelector('.legend-value').textContent = state.metric === 'absolute' ? `${formatNumber(valueOf(currentRow(), group))} TJ` : formatDelta(deltaOf(currentRow(), group));
     });
   }
   function setYear(year, draw = true) {
@@ -286,9 +297,7 @@
 
   }
   function setScope(scope) {
-    state.scope = scope; state.hover = null;
-    const groups = groupsFor(scope);
-    state.selected = scope === 'all' ? groups.map((g) => g.id) : [...groups].sort((a, b) => valueOf(rows.at(-1), b) - valueOf(rows.at(-1), a)).slice(0, 3).map((g) => g.id);
+    state.scope = scope; state.hover = null; state.trendFocus = null;
     $$('[data-scope]').forEach((b) => { b.classList.toggle('active', b.dataset.scope === scope); b.setAttribute('aria-pressed', b.dataset.scope === scope); });
     $('#chart-tooltip').hidden = true;
     renderDonut(); renderCards(); renderTrend();

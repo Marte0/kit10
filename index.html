@@ -36,7 +36,6 @@
 
       <section id="share-view" class="share-view" aria-label="Ripartizione dei consumi">
         <div class="donut-panel">
-          <div class="chart-kicker"><span class="live-dot"></span> <span id="chart-kicker">TUTTE LE ATTIVITÀ</span><span id="chart-year">2025</span></div>
           <div class="donut-wrap">
             <svg id="donut" viewBox="0 0 450 450" role="group" aria-label="Ripartizione dei consumi per categoria"></svg>
             <div class="donut-center" aria-live="polite" aria-atomic="true"><strong id="center-value">—</strong><span class="unit">TJ</span></div>
@@ -45,10 +44,11 @@
       </section>
 
       <section id="trend-view" class="trend-view" aria-label="Andamento dei consumi" hidden>
-        <div class="trend-heading"><div><p class="eyebrow">GUARDA IL PERCORSO COMPLETO</p><h2>IL TEMPO CAMBIA LE COSE.</h2></div><div class="metric-switch" role="group" aria-label="Come confrontare i consumi"><button type="button" data-metric="absolute" class="active" aria-pressed="true">Consumi</button><button type="button" data-metric="change" aria-pressed="false">Variazione dal 2002</button></div></div>
+        <div class="trend-heading"><div><h2>IL TEMPO CAMBIA LE COSE.</h2></div><div class="metric-switch" role="group" aria-label="Come confrontare i consumi"><button type="button" data-metric="absolute" class="active" aria-pressed="true">Consumi</button><button type="button" data-metric="change" aria-pressed="false">Variazione dal 2002</button></div></div>
         <p id="trend-caption" class="trend-caption">Ogni linea racconta una famiglia di attività. Sposta il cursore per esplorare gli anni.</p>
         <div class="line-chart-wrap"><svg id="line-chart" viewBox="0 0 1120 340" role="img" aria-label="Andamento annuale dei consumi dal 2002 al 2025"></svg><div id="chart-tooltip" class="chart-tooltip" hidden></div></div>
-        <div id="trend-legend" class="trend-legend" role="group" aria-label="Seleziona i gruppi da confrontare"></div><p id="selection-message" class="selection-message" aria-live="polite"></p>
+        <p class="legend-help">Tocca un nome per seguire la sua linea. Toccalo di nuovo per tornare al confronto.</p>
+        <div id="trend-legend" class="trend-legend" role="group" aria-label="Evidenzia una linea senza nascondere gli altri settori"></div>
       </section>
 
       <section class="timeline" aria-label="Scegli l’anno">
