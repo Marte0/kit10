@@ -30,3 +30,7 @@ Le categorie sono accorpamenti editoriali costanti nel tempo, elencati nella fin
 ## Da definire dopo il riscontro
 
 Accorpamenti e nomi finali, illustrazioni definitive, eventuale approfondimento di singoli rami, trattamento editoriale delle variazioni nel tempo. Le icone attuali sono segnaposto vettoriali.
+
+## Raggio del donut
+
+L’area colorata dell’anello è proporzionale al consumo annuale, con foro interno fisso. La scala è calcolata sul massimo 2002–2025 dell’ambito selezionato (Panoramica, Industria e costruzioni, Servizi): il raggio confronta gli anni nello stesso ambito, non le dimensioni di ambiti diversi. Le transizioni animano insieme proporzioni e raggio. Il centro mostra il valore completo in TJ, con separatore delle migliaia apostrofo.

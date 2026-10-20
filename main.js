@@ -70,19 +70,29 @@
     Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
     return element;
   }
-  function arcPath(start, end) {
-    const point = (angle, radius) => [225 + Math.cos(angle) * radius, 225 + Math.sin(angle) * radius];
-    const [a, b, c, d] = [point(start, 183), point(end, 183), point(end, 122), point(start, 122)];
-    const large = end - start > Math.PI ? 1 : 0;
-    return `M${a} A183 183 0 ${large} 1 ${b} L${c} A122 122 0 ${large} 0 ${d} Z`;
+  const donutInnerRadius = 95;
+  const donutMaxRadius = 210;
+  const scopeMaxTotals = Object.fromEntries(['all', 'industry', 'services'].map((scope) => [scope, Math.max(...rows.map((row) => totalOf(row, scope)))]));
+  // Within each family, the colored area is proportional to its annual consumption.
+  function outerRadius(total) {
+    return Math.sqrt(donutInnerRadius ** 2 + (donutMaxRadius ** 2 - donutInnerRadius ** 2) * total / scopeMaxTotals[state.scope]);
+  }
+  function arcPath(start, end, radius) {
+    const inner = donutInnerRadius;
+    const corner = Math.min(5, (end - start) * inner / 4);
+    const outerInset = corner / radius, innerInset = corner / inner;
+    const point = (angle, r) => [225 + Math.cos(angle) * r, 225 + Math.sin(angle) * r];
+    const large = end - start - 2 * outerInset > Math.PI ? 1 : 0;
+    const innerLarge = end - start - 2 * innerInset > Math.PI ? 1 : 0;
+    return `M${point(start, radius - corner)} Q${point(start, radius)} ${point(start + outerInset, radius)} A${radius} ${radius} 0 ${large} 1 ${point(end - outerInset, radius)} Q${point(end, radius)} ${point(end, radius - corner)} L${point(end, inner + corner)} Q${point(end, inner)} ${point(end - innerInset, inner)} A${inner} ${inner} 0 ${innerLarge} 0 ${point(start + innerInset, inner)} Q${point(start, inner)} ${point(start, inner + corner)} Z`;
   }
   function setCenter(group = null) {
     const row = currentRow();
     const total = totalOf(row, state.scope);
     const value = group ? valueOf(row, group) : total;
-    $('#center-name').textContent = group ? group.name.toUpperCase() : 'CONSUMO COMPLESSIVO';
-    $('#center-value').textContent = formatDecimal(value / 1000);
-    $('#center-extra').textContent = group ? `${formatDecimal(value / total * 100)}% ${state.scope === 'all' ? 'del totale' : 'della famiglia'}` : 'nell’anno selezionato';
+    const label = `${formatNumber(value).replace(/[’ʼ]/g, "'")} TJ${group ? ` · ${group.name}` : ''}`;
+    $('#center-value').textContent = Math.round(value).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "'");
+    $('.donut-center').setAttribute('aria-label', label);
   }
   function highlight(id) {
     state.hover = id;
@@ -102,7 +112,6 @@
     const svg = $('#donut');
     svg.replaceChildren();
     svg.insertAdjacentHTML('afterbegin', '<defs><filter id="slice-shadow" x="-30%" y="-30%" width="170%" height="170%"><feDropShadow dx="-3" dy="4" stdDeviation="0" flood-color="#24251f"/></filter></defs>');
-    svg.append(el('circle', { cx: 225, cy: 225, r: 207, fill: 'none', stroke: '#d9cfbb', 'stroke-dasharray': '2 7', 'stroke-width': 1 }));
     const groups = groupsFor(state.scope);
     const row = currentRow();
     const total = totalOf(row, state.scope);
@@ -114,7 +123,7 @@
       const value = valueOf(row, group);
       const sweep = value / total * Math.PI * 2;
       const gap = Math.min(.035, sweep * .13);
-      const path = el('path', { d: arcPath(angle + gap / 2, angle + sweep - gap / 2), fill: group.color, class: 'donut-segment', tabindex: 0, role: 'button', 'aria-label': `${group.name}: ${formatNumber(value)} TJ, ${formatDecimal(value / total * 100)}%. ${state.scope === 'all' ? 'Esplora questa famiglia.' : 'Evidenzia il gruppo.'}`, 'data-group': group.id });
+      const path = el('path', { d: arcPath(angle + gap / 2, angle + sweep - gap / 2, outerRadius(total)), fill: group.color, class: 'donut-segment', tabindex: 0, role: 'button', 'aria-label': `${group.name}: ${formatNumber(value)} TJ, ${formatDecimal(value / total * 100)}%. ${state.scope === 'all' ? 'Esplora questa famiglia.' : 'Evidenzia il gruppo.'}`, 'data-group': group.id });
       const title = el('title'); title.textContent = `${group.name}: ${formatNumber(value)} TJ`; path.append(title);
       path.addEventListener('pointerenter', () => highlight(group.id));
       path.addEventListener('pointerleave', () => highlight(null));
@@ -135,7 +144,7 @@
       amounts.forEach((value, i) => {
         const sweep = value / sum * Math.PI * 2;
         const gap = Math.min(.035, sweep * .13);
-        segments[i].setAttribute('d', arcPath(a + gap / 2, a + sweep - gap / 2));
+        segments[i].setAttribute('d', arcPath(a + gap / 2, a + sweep - gap / 2, outerRadius(sum)));
         a += sweep;
       });
     };
