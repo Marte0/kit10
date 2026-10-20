@@ -42,7 +42,6 @@
             <div class="donut-center" aria-live="polite" aria-atomic="true"><strong id="center-value">—</strong><span class="unit">TJ</span></div>
           </div>
         </div>
-        <div class="categories-panel"><div id="category-grid" class="category-grid"></div></div>
       </section>
 
       <section id="trend-view" class="trend-view" aria-label="Andamento dei consumi" hidden>
@@ -54,9 +53,11 @@
 
       <section class="timeline" aria-label="Scegli l’anno">
         <button type="button" id="play" class="play-button" aria-label="Riproduci gli anni" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5L19 12L8 19Z" fill="currentColor"/></svg></button>
-        <div class="slider-wrap"><div class="slider-labels"><span>2002</span><label for="year-slider">TRASCINA E VIAGGIA NEL TEMPO</label><span>2025</span></div><input type="range" id="year-slider" min="2002" max="2025" step="1" value="2025" aria-label="Anno visualizzato"></div>
+        <div class="slider-wrap"><input type="range" id="year-slider" min="2002" max="2025" step="1" value="2025" aria-label="Anno visualizzato"></div>
         <output class="year-output" for="year-slider" id="year-output">2025</output>
       </section>
+
+      <div class="categories-panel"><div id="category-grid" class="category-grid"></div></div>
 
     </main>
 

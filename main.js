@@ -10,19 +10,19 @@
   const makeGroups = (items) => items.map(([id, name, ids, icon, image], i) => ({ id, name, ids, icon, image, color: colors[i], ink: inks[i] }));
   const industry = makeGroups([
     ['chem', 'Chimica e farmaceutica', [4], 'chem', 'assets/images/chimica-farmaceutica-v1.png'],
-    ['food', 'Alimentare', [1], 'food', 'assets/images/alimentare-v1.png'],
+    ['food', 'Alimentare', [1], 'food', 'assets/images/alimentare-v2.png'],
     ['paper', 'Carta e tessile', [2, 3], 'paper', 'assets/images/carta-tessile-v1.png'],
-    ['mineral', 'Cemento e minerali', [5, 6], 'mineral', 'assets/images/cemento-minerali-v1.png'],
+    ['mineral', 'Cemento e minerali', [5, 6], 'mineral', 'assets/images/cemento-minerali-v2.png'],
     ['metal', 'Metalli e macchinari', [7, 8, 9, 10], 'metal', 'assets/images/metalli-macchinari-v1.png'],
-    ['other-ind', 'Altre industrie e costruzioni', [11, 12], 'crane', 'assets/images/altre-industrie-costruzioni-v1.png'],
+    ['other-ind', 'Altre industrie e costruzioni', [11, 12], 'crane', 'assets/images/altre-industrie-costruzioni-v2.png'],
   ]);
   const services = makeGroups([
-    ['trade', 'Commercio', [13], 'shop'],
-    ['hospitality', 'Alberghi e ristoranti', [14], 'food'],
-    ['finance', 'Banche e assicurazioni', [15], 'bank'],
-    ['school', 'Scuole e amministrazione', [16, 17], 'school'],
-    ['health', 'Salute e assistenza', [18], 'health'],
-    ['other-serv', 'Altri servizi', [19], 'city'],
+    ['trade', 'Commercio', [13], 'shop', 'assets/images/commercio-v2.png'],
+    ['hospitality', 'Alberghi e ristoranti', [14], 'food', 'assets/images/alberghi-ristoranti-v2.png'],
+    ['finance', 'Banche e assicurazioni', [15], 'bank', 'assets/images/banche-assicurazioni-v2.png'],
+    ['school', 'Scuole e amministrazione', [16, 17], 'school', 'assets/images/scuole-amministrazione-v2.png'],
+    ['health', 'Salute e assistenza', [18], 'health', 'assets/images/salute-assistenza-v2.png'],
+    ['other-serv', 'Altri servizi', [19], 'city', 'assets/images/altri-servizi-v2.png'],
   ]);
   const families = [
     { id: 'industry', name: 'Industria e costruzioni', ids: Array.from({ length: 12 }, (_, i) => i + 1), color: colors[0], ink: inks[0], icon: 'factory', image: 'assets/images/industria-v1.png' },
@@ -297,6 +297,7 @@
     state.view = view;
     $$('[data-view]').forEach((b) => { b.classList.toggle('active', b.dataset.view === view); b.setAttribute('aria-pressed', b.dataset.view === view); });
     $('#share-view').hidden = view !== 'share'; $('#trend-view').hidden = view !== 'trend';
+    $('.categories-panel').hidden = view !== 'share';
     $('#chart-tooltip').hidden = true;
     if (view === 'trend') renderTrend(); else { renderDonut(); renderCards(); }
 
