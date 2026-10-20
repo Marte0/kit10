@@ -29,7 +29,7 @@ Le categorie sono accorpamenti editoriali costanti nel tempo, definiti in `main.
 
 ## Da definire dopo il riscontro
 
-Accorpamenti e nomi finali, illustrazioni definitive, eventuale approfondimento di singoli rami, trattamento editoriale delle variazioni nel tempo. Le due schede della panoramica usano ritagli fotografici generati con ImageGen, in PNG trasparente, nella cartella `assets/images/`. Le icone dei gruppi di dettaglio restano segnaposto vettoriali.
+Accorpamenti e nomi finali, illustrazioni definitive, eventuale approfondimento di singoli rami, trattamento editoriale delle variazioni nel tempo. Le due schede della panoramica usano ritagli fotografici generati con ImageGen, in PNG trasparente, nella cartella `assets/images/`. Anche i sei gruppi industriali usano PNG trasparenti generati con ImageGen; per i servizi di dettaglio restano i segnaposto vettoriali. I gruppi di dettaglio sono elementi informativi, con evidenziazione al passaggio del mouse o al focus, mentre le due schede della panoramica sono pulsanti di navigazione.
 
 ## Raggio del donut
 

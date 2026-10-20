@@ -7,14 +7,14 @@
   const NS = 'http://www.w3.org/2000/svg';
   const colors = ['#B9DA49', '#FFD12E', '#95D9E5', '#FFB3D2', '#ED7770', '#ACB5F8'];
   const inks = ['#3e5412', '#785000', '#005573', '#8C0040', '#802e29', '#33489E'];
-  const makeGroups = (items) => items.map(([id, name, ids, icon], i) => ({ id, name, ids, icon, color: colors[i], ink: inks[i] }));
+  const makeGroups = (items) => items.map(([id, name, ids, icon, image], i) => ({ id, name, ids, icon, image, color: colors[i], ink: inks[i] }));
   const industry = makeGroups([
-    ['chem', 'Chimica e farmaceutica', [4], 'chem'],
-    ['food', 'Alimentare', [1], 'food'],
-    ['paper', 'Carta e tessile', [2, 3], 'paper'],
-    ['mineral', 'Cemento e minerali', [5, 6], 'mineral'],
-    ['metal', 'Metalli e macchinari', [7, 8, 9, 10], 'metal'],
-    ['other-ind', 'Altre industrie e costruzioni', [11, 12], 'crane'],
+    ['chem', 'Chimica e farmaceutica', [4], 'chem', 'assets/images/chimica-farmaceutica-v1.png'],
+    ['food', 'Alimentare', [1], 'food', 'assets/images/alimentare-v1.png'],
+    ['paper', 'Carta e tessile', [2, 3], 'paper', 'assets/images/carta-tessile-v1.png'],
+    ['mineral', 'Cemento e minerali', [5, 6], 'mineral', 'assets/images/cemento-minerali-v1.png'],
+    ['metal', 'Metalli e macchinari', [7, 8, 9, 10], 'metal', 'assets/images/metalli-macchinari-v1.png'],
+    ['other-ind', 'Altre industrie e costruzioni', [11, 12], 'crane', 'assets/images/altre-industrie-costruzioni-v1.png'],
   ]);
   const services = makeGroups([
     ['trade', 'Commercio', [13], 'shop'],
@@ -157,17 +157,21 @@
     const row = currentRow(), total = totalOf(row, state.scope);
     const grid = $('#category-grid');
     grid.classList.toggle('overview', state.scope === 'all');
+    const overview = state.scope === 'all';
     grid.innerHTML = groups.map((group) => {
       const value = valueOf(row, group);
-      const shareLabel = `<span class="card-percent">${percent(value / total * 100)}<small>%</small></span>`;
-      return `<button type="button" class="category-card ${state.scope === 'all' ? 'overview-card' : ''}" data-group="${group.id}" style="--card-tint:${group.color}28;--card-ink:${group.ink};--card-color:${group.color}" aria-label="${group.name}: ${formatDecimal(value / total * 100)}%, ${formatNumber(value)} TJ. ${state.scope === 'all' ? 'Esplora la famiglia' : 'Scopri le attività incluse'}">${group.image ? '' : shareLabel}<span class="card-icon${group.image ? ' card-image' : ''}">${group.image ? `${shareLabel}<img src="${group.image}" alt="" width="1254" height="1254" decoding="async">` : icon(group.icon, group.color)}</span><span class="card-name">${group.name.toUpperCase()}</span><span class="card-value">${formatNumber(value)} TJ</span>${state.scope === 'all' ? '<span class="card-arrow" aria-hidden="true">↗</span>' : ''}</button>`;
+      const tag = overview ? 'button' : 'article';
+      const attributes = overview ? 'type="button"' : 'tabindex="0"';
+      const description = `${group.name}: ${formatDecimal(value / total * 100)}%, ${formatNumber(value)} TJ${overview ? '. Esplora la famiglia' : ''}`;
+      const visual = group.image ? `<img src="${group.image}" alt="" width="1254" height="1254" decoding="async">` : `<span class="badge-fallback">${icon(group.icon, group.color)}</span>`;
+      return `<${tag} ${attributes} class="category-card ${overview ? 'overview-card' : 'detail-item'}" data-group="${group.id}" style="--card-tint:${group.color}28;--card-ink:${group.ink};--card-color:${group.color}" aria-label="${description}"><span class="card-icon category-badge${group.image ? ' card-image' : ''}"><span class="card-percent">${percent(value / total * 100)}<small>%</small></span>${visual}</span><span class="card-name">${group.name.toUpperCase()}</span><span class="card-value">${formatNumber(value)} TJ</span>${overview ? '<span class="card-arrow" aria-hidden="true">↗</span>' : ''}</${tag}>`;
     }).join('');
     $$('.category-card').forEach((card) => {
       card.addEventListener('pointerenter', () => highlight(card.dataset.group));
       card.addEventListener('pointerleave', () => highlight(null));
       card.addEventListener('focus', () => highlight(card.dataset.group));
       card.addEventListener('blur', () => highlight(null));
-      card.addEventListener('click', () => state.scope === 'all' ? setScope(card.dataset.group) : highlight(card.dataset.group));
+      if (overview) card.addEventListener('click', () => setScope(card.dataset.group));
     });
     highlight(null);
   }

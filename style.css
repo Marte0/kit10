@@ -55,12 +55,24 @@
 @media(max-width:760px){.explore-bar{padding-block:15px}.scope-switch{display:grid;grid-template-columns:1fr 1.65fr .9fr;gap:7px;width:100%}.scope-switch button{min-height:50px;gap:7px;padding:8px 10px;font-size:12px}.scope-check{display:none}.scope-switch button.active{box-shadow:-2px 2px 0 var(--ink)}}
 @media(max-width:370px){.scope-switch{grid-template-columns:1fr 1.55fr .85fr;gap:5px}.scope-switch button{gap:5px;padding:8px 6px;font-size:11px}.scope-switch .scope-swatch{flex-basis:9px;width:9px;height:9px}.scope-switch [data-scope="all"] .scope-swatch{flex-basis:15px;width:15px}.scope-switch [data-scope="all"] .scope-swatch::before,.scope-switch [data-scope="all"] .scope-swatch::after{width:9px;height:9px}.scope-switch [data-scope="all"] .scope-swatch::after{left:6px}}
 
-/* Photographic cutouts in the colored circles of kit 09. */
-.overview-card .card-image{--badge-size:145px;position:relative;width:min(100%,var(--badge-size));height:auto;aspect-ratio:1;align-self:center;border-radius:50%;overflow:hidden;background:var(--card-color)}
-.card-image img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;transform:translateY(15%) scale(1.05) scaleX(-1)}
-@media(max-width:760px){.overview-card .card-image{--badge-size:120px}}
-@media(max-width:370px){.overview-card .card-image{--badge-size:100px}}
-
-.overview-card .card-image .card-percent{position:absolute;z-index:1;top:9%;left:0;width:100%;text-align:center;font-size:38px;line-height:1;pointer-events:none}
-@media(max-width:760px){.overview-card .card-image .card-percent{font-size:32px}}
-@media(max-width:370px){.overview-card .card-image .card-percent{font-size:28px}}
+/* Reference layout: percentage above photographic subject, names and TJ below. */
+.category-badge{--badge-size:145px;position:relative!important;display:block;width:min(100%,var(--badge-size))!important;height:auto!important;aspect-ratio:1;flex:none;align-self:center;border-radius:50%;overflow:hidden;background:var(--card-color);top:auto!important;right:auto!important;margin:0}
+.category-badge .card-percent{position:absolute;z-index:2;top:8%;left:0;width:100%;margin:0;text-align:center;font:700 54px/1 Cubano,Arial,sans-serif;letter-spacing:-.03em;color:var(--card-ink);pointer-events:none}
+.category-badge .card-percent small{font-size:.5em;margin-left:2px}
+.card-image img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:contain;transform:translateY(6%)}
+.detail-item[data-group="chem"] .card-image img{transform:translateY(15%)}
+.detail-item[data-group="food"] .card-image img{transform:translateY(10%)}
+.detail-item[data-group="metal"] .card-image img{transform:translateY(11%)}
+.overview-card .card-image img{inset:40% 0 auto;height:82%;transform:scaleX(-1)}
+.overview-card .category-badge{margin-top:10px}
+.overview-card .category-badge .card-percent{font-size:54px}
+.badge-fallback{position:absolute;top:36%;left:10%;width:80%;height:68%}
+.badge-fallback svg{display:block;width:100%;height:100%}
+.category-grid:not(.overview){gap:26px 18px;align-items:start}
+.category-card.detail-item,.category-card.detail-item:hover,.category-card.detail-item.highlighted{align-items:center;min-height:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;transform:none;text-align:center;cursor:default}
+.detail-item .card-name{max-width:100%;width:100%;min-height:2.2em;margin:13px 0 0;color:var(--card-ink);font:normal 16px/1.1 Cubano,Arial,sans-serif;letter-spacing:-.01em}
+.detail-item .card-value{margin-top:7px;color:var(--ink);font:700 14px/1.2 Satoshi,Arial,sans-serif;font-variant-numeric:tabular-nums}
+.detail-item:focus-visible{outline:2px solid var(--card-ink);outline-offset:6px}
+@media(max-width:1050px) and (min-width:761px){.category-badge{--badge-size:125px}.category-badge .card-percent{font-size:46px}.detail-item .card-name{font-size:14px}.detail-item .card-value{font-size:12px}}
+@media(max-width:760px){.category-badge{--badge-size:110px}.category-badge .card-percent{font-size:42px}.overview-card .category-badge .card-percent{font-size:46px}.category-grid:not(.overview){grid-template-columns:repeat(3,minmax(0,1fr));gap:23px 10px}.detail-item .card-name{font-size:12px;min-height:3.3em;margin-top:12px}.detail-item .card-value{font-size:11px;margin-top:5px}.overview-card .category-badge{--badge-size:120px}}
+@media(max-width:370px){.category-grid:not(.overview){grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 12px}.detail-item .category-badge{--badge-size:120px}.category-grid:not(.overview) .detail-item .card-icon{width:min(100%,var(--badge-size))!important}.category-grid:not(.overview) .detail-item .card-name{font-size:13px;min-height:2.2em}.category-grid:not(.overview) .category-card.detail-item{min-height:0}.overview-card .category-badge{--badge-size:100px}.detail-item .category-badge .card-percent{font-size:46px}.overview-card .category-badge .card-percent{font-size:38px}}
