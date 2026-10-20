@@ -7,13 +7,6 @@
   const NS = 'http://www.w3.org/2000/svg';
   const colors = ['#B9DA49', '#FFD12E', '#95D9E5', '#FFB3D2', '#ED7770', '#ACB5F8'];
   const inks = ['#3e5412', '#785000', '#005573', '#8C0040', '#802e29', '#33489E'];
-  const branchNames = {
-    1: 'Prodotti alimentari', 2: 'Tessile e cuoio', 3: 'Carta e stampa', 4: 'Prodotti chimici e farmaceutici',
-    5: 'Cemento e calcestruzzo', 6: 'Altri minerali non ferrosi', 7: 'Metallo e ferro', 8: 'Metalli non ferrosi',
-    9: 'Metalli e apparecchi', 10: 'Fabbricazione di macchinari', 11: 'Altre industrie', 12: 'Costruzioni',
-    13: 'Commercio', 14: 'Alberghi e ristorazione', 15: 'Credito e assicurazioni', 16: 'Amministrazione',
-    17: 'Istruzione', 18: 'Servizi sanitari e sociali', 19: 'Altri servizi',
-  };
   const makeGroups = (items) => items.map(([id, name, ids, icon], i) => ({ id, name, ids, icon, color: colors[i], ink: inks[i] }));
   const industry = makeGroups([
     ['chem', 'Chimica e farmaceutica', [4], 'chem'],
@@ -100,11 +93,7 @@
     $$('.donut-segment').forEach((p) => p.classList.toggle('dimmed', Boolean(id && p.dataset.group !== id)));
     $$('.category-card').forEach((c) => c.classList.toggle('highlighted', c.dataset.group === id));
     setCenter(group || null);
-    if (group && state.scope !== 'all') {
-      $('#category-detail').textContent = `Comprende: ${group.ids.map((i) => branchNames[i].toLowerCase()).join('; ')}.`;
-    } else {
-      $('#category-detail').textContent = state.scope === 'all' ? 'Le percentuali si riferiscono all’insieme di industria, costruzioni e servizi.' : 'Le percentuali si riferiscono alla famiglia selezionata. Seleziona un gruppo per scoprirne le attività.';
-    }
+
   }
   let donutFrame = null, lastDonutScope = null, lastDonutValues = null;
   function renderDonut() {
@@ -179,9 +168,6 @@
       card.addEventListener('blur', () => highlight(null));
       card.addEventListener('click', () => state.scope === 'all' ? setScope(card.dataset.group) : highlight(card.dataset.group));
     });
-    $('#categories-title').textContent = state.scope === 'all' ? 'DOVE VA L’ENERGIA' : 'DENTRO QUESTA FAMIGLIA';
-    $('#categories-count').textContent = state.scope === 'all' ? '02 FAMIGLIE' : '06 GRUPPI';
-    $('#chart-instruction').innerHTML = state.scope === 'all' ? 'Scegli una famiglia per scoprire cosa c’è dentro <span>↗</span>' : 'Ogni colore è un gruppo di attività. Esploralo!';
     highlight(null);
   }
 
@@ -284,19 +270,6 @@
       button.querySelector('.legend-value').textContent = state.selected.includes(group.id) ? state.metric === 'absolute' ? `${formatDecimal(valueOf(currentRow(), group) / 1000)} mila TJ` : formatDelta(deltaOf(currentRow(), group)) : '';
     });
   }
-  function renderInsight() {
-    const row = currentRow();
-    const total = totalOf(row, state.scope), first = totalOf(rows[0], state.scope);
-    const delta = (total / first - 1) * 100;
-    if (state.year === 2002) {
-      $('#insight-text').innerHTML = `<b>Si parte dal 2002.</b> ${state.scope === 'all' ? 'Industria, costruzioni e servizi' : scopeNames[state.scope]} usano ${formatNumber(total)} TJ. Muovi lo slider e scopri cosa succede dopo.`;
-    } else if (state.view === 'trend' || state.scope !== 'all') {
-      $('#insight-text').innerHTML = `<b>${formatDelta(delta)} rispetto al 2002.</b> È il cambiamento dei consumi ${state.scope === 'all' ? 'di tutte queste attività' : state.scope === 'industry' ? 'dell’industria e delle costruzioni' : 'dei servizi'} nel ${state.year}. Il grafico racconta quanta energia si usa, non quante cose si producono.`;
-    } else {
-      const share = valueOf(row, families[0]) / total * 100;
-      $('#insight-text').innerHTML = `<b>Nel ${state.year}, circa ${Math.round(share)} parti su 100</b> dell’energia qui rappresentata vanno all’industria e alle costruzioni. Le altre ${100 - Math.round(share)} ai servizi, dai negozi alle scuole.`;
-    }
-  }
   function setYear(year, draw = true) {
     state.year = year;
     $('#year-slider').value = year;
@@ -305,16 +278,15 @@
     if (state.view === 'share') { renderDonut(); renderCards(); }
     else if (draw) { $('#chart-tooltip').hidden = true; updateTrendCursor(); }
     else { updateTrendCursor(); }
-    renderInsight();
+
   }
   function setScope(scope) {
     state.scope = scope; state.hover = null;
     const groups = groupsFor(scope);
     state.selected = scope === 'all' ? groups.map((g) => g.id) : [...groups].sort((a, b) => valueOf(rows.at(-1), b) - valueOf(rows.at(-1), a)).slice(0, 3).map((g) => g.id);
     $$('[data-scope]').forEach((b) => { b.classList.toggle('active', b.dataset.scope === scope); b.setAttribute('aria-pressed', b.dataset.scope === scope); });
-    $('#explore-hint').textContent = scope === 'all' ? 'Due famiglie, tante attività.' : 'Sei gruppi, una famiglia.';
     $('#chart-tooltip').hidden = true;
-    renderDonut(); renderCards(); renderTrend(); renderInsight();
+    renderDonut(); renderCards(); renderTrend();
   }
   function setView(view) {
     state.view = view;
@@ -322,7 +294,7 @@
     $('#share-view').hidden = view !== 'share'; $('#trend-view').hidden = view !== 'trend';
     $('#chart-tooltip').hidden = true;
     if (view === 'trend') renderTrend(); else { renderDonut(); renderCards(); }
-    renderInsight();
+
   }
   function stopPlaying() {
     if (state.timer) window.clearInterval(state.timer);
@@ -346,11 +318,6 @@
     $$('[data-metric]').forEach((m) => { m.classList.toggle('active', m === b); m.setAttribute('aria-pressed', m === b); });
     $('#chart-tooltip').hidden = true; renderTrend();
   }));
-  const dialog = $('#about-dialog');
-  $('#about-open').addEventListener('click', () => { stopPlaying(); $('#chart-tooltip').hidden = true; dialog.showModal(); });
-  $('#about-close').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('click', (event) => { if (event.target === dialog) { const r = dialog.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) dialog.close(); } });
-  $('#group-definitions').innerHTML = [['Industria e costruzioni', industry], ['Servizi', services]].map(([name, groups]) => `<p class="definition-family">${name}</p><ul>${groups.map((g) => `<li><b>${g.name}:</b> ${g.ids.map((id) => branchNames[id]).join('; ')}.</li>`).join('')}</ul>`).join('');
   document.addEventListener('visibilitychange', () => { if (document.hidden) stopPlaying(); });
   let resizeFrame;
   window.addEventListener('resize', () => { cancelAnimationFrame(resizeFrame); resizeFrame = requestAnimationFrame(() => { if (state.view === 'trend') renderTrend(); }); });

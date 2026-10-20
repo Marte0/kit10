@@ -11,7 +11,7 @@ HTML, CSS e JavaScript nativi, con grafici e icone in SVG. Nessun utilizzo di Si
 - Seleziona una famiglia dall’anello o dalle schede; torna alla panoramica con il pulsante sopra il grafico.
 - Cambia anno con lo slider (anche con le frecce della tastiera) o il tasto di riproduzione.
 - Nella vista temporale seleziona fino a tre gruppi e confronta consumi o variazione dal 2002. Il cursore sul grafico consente di leggere i singoli anni.
-- Apri “Dati, gruppi e unità di misura” per vedere metodo, accorpamenti e fonti.
+- Metodo e fonti sono documentati in questo README.
 
 ## Dati e metodo della bozza
 
@@ -25,7 +25,7 @@ Per ogni ramo e vettore si calcola `fattore = valore 2013 recente / valore 2013 
 
 Si tratta di una ricostruzione divulgativa, non di una serie ufficiale omogeneizzata. Il raccordo rimuove il cambio di base del 2013 ma non garantisce l’eliminazione di tutti gli altri effetti metodologici nel tempo. Per esempio, dal 2008 i codici NOGA 49, 50 e 51 dei trasporti sono esclusi dall’estrapolazione dei servizi. Nessuna levigatura o interpolazione viene applicata agli andamenti annuali. L’anello interpola solo la transizione visiva tra due anni selezionati, senza cambiare i dati.
 
-Le categorie sono accorpamenti editoriali costanti nel tempo, elencati nella finestra informativa. Le quote sono calcolate rispetto all’ambito selezionato. I valori usati per i calcoli mantengono precisione; la visualizzazione è arrotondata. Le curve mostrano segmenti tra osservazioni annuali; i colori dei gruppi rimangono costanti nelle due viste.
+Le categorie sono accorpamenti editoriali costanti nel tempo, definiti in `main.js`. Le quote sono calcolate rispetto all’ambito selezionato. I valori usati per i calcoli mantengono precisione; la visualizzazione è arrotondata. Le curve mostrano segmenti tra osservazioni annuali; i colori dei gruppi rimangono costanti nelle due viste.
 
 ## Da definire dopo il riscontro
 
