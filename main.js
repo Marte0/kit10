@@ -178,7 +178,9 @@
   function renderTrend() {
     const svg = $('#line-chart'); svg.replaceChildren();
     const mobile = window.innerWidth < 760;
-    const W = mobile ? Math.max(280, window.innerWidth - 40) : 1120, H = mobile ? 300 : 340;
+    const compactDesktop = window.innerWidth >= 1100 && window.innerHeight >= 768;
+    const W = mobile ? Math.max(280, window.innerWidth - 40) : Math.max(600, $('.line-chart-wrap').clientWidth);
+    const H = mobile ? 300 : compactDesktop ? Math.max(200, Math.min(330, window.innerHeight - 570)) : 340;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     const margin = { left: 56, right: 25, top: 39, bottom: 38 };
     const groups = groupsFor(state.scope);
@@ -210,7 +212,6 @@
     hit.addEventListener('pointerleave', () => { $('#chart-tooltip').hidden = true; });
     svg.append(hit);
     trendGeometry = { x, y, W, margin, getValue, groups };
-    $('#trend-caption').textContent = state.metric === 'absolute' ? 'Più in alto è la linea, più energia viene usata. Esplora un anno con il cursore o con lo slider.' : 'Tutti partono da zero: qui confronti quanto sono cambiati i consumi rispetto al 2002, anche se le attività hanno dimensioni diverse.';
     renderLegend();
     focusTrend(state.trendFocus);
   }

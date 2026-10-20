@@ -197,3 +197,37 @@
 @media(min-width:901px) and (min-height:850px){.page-header{padding-top:36px;padding-bottom:28px}}
 
 @media(min-width:901px) and (max-height:849px){.categories-panel{padding-bottom:8px}}
+
+/* Time-view controls share the identity of the main view menu. */
+.trend-view{min-height:0;padding:16px 0 4px}
+.trend-heading{justify-content:center;align-items:center}
+.metric-switch{gap:5px;padding:4px;border:2px solid var(--ink);border-radius:12px;background:var(--cream);box-shadow:-2px 3px 0 var(--ink)}
+.metric-switch button{min-height:44px;padding:9px 16px;border-radius:7px;background:transparent;color:var(--ink);font:700 13px/1.2 Satoshi,Arial,sans-serif;transition:background-color .16s ease}
+.metric-switch button.active{background:#ffbcbc;color:var(--ink)}
+.metric-switch button:focus-visible{outline:2px solid var(--ink);outline-offset:-3px}
+.line-chart-wrap{margin-top:16px}
+@media(hover:hover){.metric-switch button:not(.active):hover{background:#ed5853;color:#241610}}
+@media(min-width:1100px) and (min-height:720px){
+ .trend-view .legend-help{margin:8px 0 4px;font-size:13px}
+ .trend-view .trend-legend{gap:4px 24px}
+ .trend-view .trend-legend-item{min-height:58px;padding-block:6px}
+}
+@media(max-width:760px){
+ .trend-heading{flex-direction:row}
+ .metric-switch{max-width:100%}
+ .metric-switch button{padding-inline:12px}
+}
+@media(prefers-reduced-motion:reduce){.metric-switch button{transition:none}}
+
+/* Shared navigation stays grouped; chart-specific controls recede. */
+.play-button{background:#ed5853}
+.scope-check{display:none}
+.view-controls{padding-bottom:12px}
+.explore-bar{padding-top:6px;padding-bottom:8px}
+.trend-view{padding-top:24px}
+.trend-heading{justify-content:flex-end}
+.metric-switch{padding:3px;gap:3px;border:1px solid #b8ad99;border-radius:9px;box-shadow:none;background:transparent}
+.metric-switch button{padding:8px 13px;font-weight:500;border-radius:6px;min-height:40px}
+.metric-switch button.active{background:#ffbcbc;color:var(--ink);font-weight:700}
+@media(hover:hover){.metric-switch button:not(.active):hover{background:#eee4d5;color:var(--ink)}}
+@media(max-width:760px){.trend-view{padding-top:24px}.trend-heading{justify-content:center}.metric-switch button{min-height:44px}}
